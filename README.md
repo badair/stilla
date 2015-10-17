@@ -1,2 +1,2 @@
-# scilla
-C++14 LINQ-style library for lazy container enumeration with fluid interface
+# stilla
+C++14 LINQ-inspired library for lazy container enumeration using a fluid interface.
