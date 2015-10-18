@@ -2,7 +2,9 @@
 LINQ-inspired lazy range composition for C++14
 
 -fluid interface
+
 -static composition with iterators...may create a coroutine-based implementation in the future
+
 -for now, lazy_eval_iterator implements boost::iterator_facade as a single pass traversal iterator
 
 Example usage:
@@ -52,7 +54,12 @@ Example usage:
     	return 0;
     }
 ```
+
 -TODO: need to implement a lazy replacement for boost::filter_iterator
+
 -TODO: template specializations, static_assert messages
+
 -TODO: more range operations such as select_many, order_by
+
 -TODO: const-correctness, access specifiers, move optimizations 
+
