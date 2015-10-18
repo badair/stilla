@@ -55,4 +55,4 @@ Example usage:
 -TODO: need to implement a lazy replacement for boost::filter_iterator
 -TODO: template specializations, static_assert messages
 -TODO: more range operations such as select_many, order_by
--TODO: const-correctness, access specifiers, move optimizations
+-TODO: const-correctness, access specifiers, move optimizations 
