@@ -83,11 +83,13 @@ MARK
 */
 ```
 
--TODO: need to implement a lazy replacement for boost::filter_iterator for the where function
-
 -TODO: template specializations, static_assert messages
 
--TODO: more range operations such as select_many, order_by
+-TODO: compound range operations such as select_many, concat
 
--TODO: const-correctness, access specifiers, move optimizations 
+-TODO: const-correctness, access specifiers, possibly move optimizations 
+
+-TODO: order_by?
+
+
 
