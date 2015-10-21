@@ -10,49 +10,54 @@ LINQ-inspired lazy range composition for C++14
 Example usage:
 ```C++
     int main()
-    {
-    	auto foos = vector<foo>{ foo(0), foo(1), foo(2), foo(3), foo(4) };
-    	auto strings = array<string, 5>{ "bob", "sally", "john", "cindy", "mark"};
-    
-    	auto johnless = from(foos)
-    				    .for_each(f, cout << "foo numbers: " << f.number << endl)
-    				    .select(f, strings[f.number])
-    				    .for_each(s, cout << "strings: " << s << endl)
-    				    .where(s, s != "john");
-    
-    	auto john_string =   from(strings)
-    						 .first_where(s, !johnless.contains(s));
-    
-    	cout << "john string: " << john_string << endl;
-    				 
-                     
-    
-    	cout << endl << "count: " << johnless.count() << endl << endl;
-    
-    	for (auto element : johnless)
-    	{
-    		cout << element << endl;
-    	}
-    
-    	auto vec = johnless.to_vector();
-    
-    	for (auto element : vec)
-    	{
-    		cout << element << endl;
-    	}
-    
-    	cout << endl;
-    
-    	//without macros
-    	auto ugly_range = make_basic_range(foos.begin(), foos.end())
-                            .select_([&](const auto& x) {return strings[(*x).number]; })
-                            .where_([&](const auto& s) {return s != "john"; })
-                            .select_([&](const auto& s) {return uppercase(*s); })
-                            .for_each_([&](const auto& s) {cout << s << endl; });
-    
-    	cin.get();
-    	return 0;
-    }
+{
+	auto foos = vector<foo>{ foo(0), foo(1), foo(2), foo(3), foo(4) };
+	auto strings = array<string, 6>{ "bob", "sally", "john", "cindy", "mark"};
+
+	auto range = from(foos)
+                .select(f, strings[f.number])
+                .where(s, s != "john")
+                .select(s, uppercase(s))
+                .for_each(s, cout << s << " starts with " << from(foos).select(f, strings[f.number]).where(s2, s[0] == ::toupper(s2[0])).select(s2, s2[0]).first() << endl);
+
+	cout << endl;
+
+	for (auto element : range)
+	{
+		cout << element << endl;
+	}
+
+	cout << endl << "count: " << range.count() << endl << endl;
+
+	auto vec = *(range.to_vector());
+
+	for (size_t i = 0; i < vec.size(); ++i)
+	{
+		cout << vec[i] << endl;
+	}
+
+	cin.get();
+	return 0;
+}
+
+/*output
+BOB starts with b
+SALLY starts with s
+CINDY starts with c
+MARK starts with m
+
+BOB
+SALLY
+CINDY
+MARK
+
+count: 4
+
+BOB
+SALLY
+CINDY
+MARK
+*/
 ```
 
 -TODO: need to implement a lazy replacement for boost::filter_iterator for the where function
