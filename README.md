@@ -12,7 +12,6 @@ Example usage:
 struct foo
 {
 	const int number;
-	int get_number() { return number; }
 	foo(int d) :number(d) {}
 };
 
