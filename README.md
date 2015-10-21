@@ -3,9 +3,9 @@ LINQ-inspired lazy range composition for C++14
 
 -fluid interface via unobtrusive macros - create lambdas using syntax similar to C#
 
--static composition with iterators (may create a coroutine-based implementation in the future)
+-static composition built on iterator dereferencing (may create a coroutine-based implementation in the future)
 
--for now, implements boost::iterator_facade as a single pass traversal iterator
+-for now, implements boost::iterator_facade as a single pass iterator
 
 Example usage:
 ```C++
