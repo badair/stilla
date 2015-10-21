@@ -28,7 +28,7 @@ string uppercase(string s)
     int main()
 {
 	auto foos = vector<foo>{ foo(0), foo(1), foo(2), foo(3), foo(4) };
-	auto strings = array<string, 6>{ "bob", "sally", "john", "cindy", "mark"};
+	auto strings = array<string, 5>{ "bob", "sally", "john", "cindy", "mark"};
 
 	auto range = from(foos)
                 .select(f, strings[f.number])
