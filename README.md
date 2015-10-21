@@ -9,6 +9,23 @@ LINQ-inspired lazy range composition for C++14
 
 Example usage:
 ```C++
+struct foo
+{
+	const int number;
+	int get_number() { return number; }
+	foo(int d) :number(d) {}
+};
+
+string uppercase(string s)
+{
+	for (auto& c : s)
+	{
+		c = toupper(c);
+	}
+
+	return s;
+}
+
     int main()
 {
 	auto foos = vector<foo>{ foo(0), foo(1), foo(2), foo(3), foo(4) };
