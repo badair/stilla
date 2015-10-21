@@ -34,7 +34,12 @@ string uppercase(string s)
                 .select(f, strings[f.number])
                 .where(s, s != "john")
                 .select(s, uppercase(s))
-                .for_each(s, cout << s << " starts with " << from(foos).select(f, strings[f.number]).where(s2, s[0] == ::toupper(s2[0])).select(s2, s2[0]).first() << endl);
+                .for_each(s, cout << s << " starts with " << 
+                   from(foos).select(f, strings[f.number])
+                   .where(s2, s[0] == ::toupper(s2[0]))
+                   .select(s2, s2[0])
+                   .first() 
+                << endl);
 
 	cout << endl;
 
