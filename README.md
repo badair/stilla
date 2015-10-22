@@ -27,8 +27,7 @@ int main()
 		 from(indexes)
 		.select(i, names[i.number])
 		.where(s, s != "john")
-		.select(s, s)
-	        .select(s, from(names).where(s2, s[0] == s2[0]).select(s2, s2).first());
+		.select(s, from(names).where(s2, s[0] == s2[0]).select(s2, s2).first());
 
 	//lazy evaluation - the range is evaluated only when it is iterated 
 	//over, which it does not do internally. "tommy" will show in the results
