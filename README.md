@@ -1,7 +1,7 @@
 # stilla
 LINQ-inspired lazy range composition for C++14
 
--fluid interface using unobtrusive macros with a lambda shorthand syntax akin to C#
+-fluid interface using unobtrusive macros with a lambda "expression" shorthand syntax akin to C#
 
 -iterator dereference operator used to achieve statically dispatched lazy evaluation (may create a coroutine-based implementation in the future)
 
