@@ -1,11 +1,16 @@
 # stilla
-LINQ-inspired lazy range composition for C++14
+LINQ-inspired lazy range composition for C++14 
 
--fluid interface using unobtrusive macros with a lambda "expression" shorthand syntax akin to C#
+-iterator-based
 
--iterator dereference operator used to achieve statically dispatched lazy evaluation (may create a coroutine-based implementation in the future)
+-dereference operator used to achieve statically dispatched lazy evaluation
 
-Example usage:
+-uses a lambda "expression" shorthand syntax akin to C#
+
+-fluid interface via unobtrusive macros (actual function names are semi-mangled to avoid unwanted autocompletion)
+
+-may create a coroutine-based implementation in the future
+
 ```C++
 struct foo
 {
@@ -19,11 +24,11 @@ int main()
 	auto names = std::vector<string>{ "bob", "sally", "sammy", "john", "cindy", "saul", "mark", "zoe" };
 
 	auto range = 
-		from(indexes)
+		 from(indexes)
 		.select(i, names[i.number])
 		.where(s, s != "john")
 		.select(s, s)
-	    .select(s, from(names).where(s2, s[0] == s2[0]).select(s2, s2).first());
+	        .select(s, from(names).where(s2, s[0] == s2[0]).select(s2, s2).first());
 
 	//lazy evaluation - the range is evaluated only when it is iterated 
 	//over, which it does not do internally. "tommy" will show in the results
