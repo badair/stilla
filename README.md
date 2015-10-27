@@ -1,9 +1,7 @@
 # stilla
-lazy/parallel range composition for C++14 
+header-only, lazy, composable, parallelizable range library for C++14 
 
--proxy iterators used to achieve lazy evaluation
--allows a lambda "expression" shorthand syntax akin to C#
--fluid interface via unobtrusive macros (actual function names are semi-mangled to avoid unwanted autocompletion)
+-this is a work in progress (don't expect range-v4) 
 
 ```C++
 #include<string>
@@ -29,7 +27,12 @@ using std::vector;
 using std::array;
 using std::string;
 
-//you can format these macros however you prefer. The actual names are semi-mangled to prevent unintended auto-completion
+/*These macro ideas are subject to change. They provide terseness 
+at the expense of flexibility. Currently, the member function names 
+are semi-mangled to prevent unintended auto-completion. Though they 
+are relatively unobtrusive, they will probably reworked or done away
+with in the near future.*/
+
 #define select(element, expr) stilla_s3l3ct([&](auto element){return (expr);})
 #define where(element, expr) stilla_wh3r3([&](auto element) -> bool {return (expr);})
 #define from(container) make_range(begin(container), end(container))
@@ -113,6 +116,7 @@ int main()
 ```
 
 -TODO: 
+-naming consistency throughout
 -boost unit tests
 -more detailed template specializations for different kinds of containers/iterators
 -thorough static_assert messages
