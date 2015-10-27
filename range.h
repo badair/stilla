@@ -1,17 +1,20 @@
 
 #include "lazy_eval_iterator.h"
 #include "lazy_filter_iterator.h"
+#include "parallel_generator.h"
+#include "lock_free_parallel_generator.h"
 
 template<typename itr>
 struct range
 {
 	using this_type = range<itr>;
+
 	using iterator = itr;
 
 	itr _begin;
 	itr _end;
 
-	using value_type = typename std::remove_pointer<itr>::type;
+	using value_type = typename std::remove_reference<typename std::remove_pointer<itr>::type>::type;
 
 	auto begin()
 	{
@@ -65,21 +68,26 @@ struct range
 		return *this;
 	}
 
-	/* TODO
-	template<typename range_t>
-	auto concat(range_t r) const
+	/* TODO works, but is hacky
+	template <typename V = value_type>
+	typename std::enable_if<
+		!std::is_trivially_copyable<V>::value || 
+		!std::is_trivially_destructible<V>::value,	
+	parallel_generator<itr> >::type
+	parallel()
 	{
-	static_assert(std::is_same<decltype()*r.begin())), decltype(*_begin)>::value, "Concatenating range has a different underlying value." );
-
-	return *this;
+		return make_parallel_generator(_begin, _end);
 	}*/
 
-	/*TODO (do concat first)
-	template<typename select_funtor>
-	auto select_many(select_funtor f) -> decltype(make_lazy_range(_begin, _end, f))
+	template <typename V = value_type>
+	typename std::enable_if<
+		true,//std::is_scalar<V>::value
+		     //|| (std::is_trivially_copyable<V>::value && std::is_trivially_destructible<V>::value),
+	lock_free_parallel_generator<itr> >::type
+	parallel()
 	{
-	return make_lazy_range(_begin, _end, f);
-	}*/
+		return make_lock_free_parallel_generator(_begin, _end);
+	}
 
 	bool has_any()
 	{
@@ -174,7 +182,6 @@ auto inline make_range(itr&& begin, itr&& end)
 }
 
 template<typename container>
-auto inline make_range(container& c)
-{
+auto inline make_range(container& c) {
 	return make_range(begin(c), end(c));
 }

@@ -25,14 +25,7 @@ struct lazy_eval_iterator
 	{
 	}
 
-	lazy_eval_iterator operator=(this_type& other)
-	{
-		std::swap(other.arg, arg);
-		std::swap(other.expr, expr);
-		return *this;
-	}
-
-	auto operator*()
+	auto operator*() const
 	{
 		return expr(*arg);
 	}

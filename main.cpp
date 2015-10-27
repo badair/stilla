@@ -8,6 +8,9 @@
 #include<memory>
 #include<cassert>
 #include<list>
+#include<future>
+#include<chrono>
+#include<cstring>
 
 #include"range.h"
 
@@ -29,14 +32,18 @@ struct foo
 	foo(int d) :number(d) {}
 };
 
-string uppercase(string s)
+string slow_uppercase(string s)
 {
-	for (auto& c : s)
+	string result = "";
+
+	for (auto c : s)
 	{
-		c = toupper(c);
+		result += toupper(c);
+
+		for (int i = 0; i < 9999999; i++);
 	}
 
-	return s;
+	return result;
 }
 
 using std::begin;
@@ -44,27 +51,35 @@ using std::end;
 
 int main()
 {
-	auto indexes = std::array<foo, 8>{ foo(0), foo(1), foo(2), foo(3), foo(4), foo(5), foo(6), foo(7) };
-	auto names = std::vector<string>{ "bob", "sally", "sammy", "john", "cindy", "saul", "mark", "zoe" };
+	auto silly_indexes = std::list<foo>{ foo(0), foo(1), foo(2), foo(3), foo(4), foo(5), foo(6), foo(7), foo(8), foo(9), foo(10)};
+	auto letters = std::vector<char>{ 'j', 'a', 'b', 'c', 'd', 'f', 'h', 'i', 'm', 's', 'z' };
+	auto names = std::array<string, 11>{ "johnjacobjingleheimerschmidt", "allen", "bob", "cindy", "derek", "hannah", "ian", "megan", "stewart", "zoe", "freddy"};
 
-	auto range = 
-		from(indexes)
-		.select(i, names[i.number])
-		.where(s, s != "john")
-		.select(s, s)
-	    .select(s, from(names).where(s2, s[0] == s2[0]).select(s2, s2).first());
+	auto my_range =
+		from(silly_indexes)
+		.select(f, letters[f.number])
+		.where(l, l != 'd')
+		.select(l, from(names).where(n, n[0] == l).first())
+		.where(n, n != "megan" && n != "alex" && n.size() > 3)
+		.select(n, slow_uppercase(n));
 
-	//lazy evaluation - the range is evaluated only when it is iterated 
-	//over, which it does not do internally. "tommy" will show in the results
-	//because of this. Currently, you cannot change what the original begin()
-	//iterator points to (names[0] in this case).
-	names[2] = "tommy";
+	names[1] = "alex";
 
-	for (auto r : range)
+	cout << "lazy evaluation..." << endl;
+
+	for (auto element : my_range)
 	{
-		cout << r << endl;
+		cout << element << endl;
 	}
 
+	cout << endl << "parallel evaluation/iteration..." << endl;
+
+	for (auto element : my_range.parallel())
+	{
+		cout << element << endl;
+	}
+
+	cout << endl << "press key to exit..." << endl;
 	cin.get();
 	return 0;
 }

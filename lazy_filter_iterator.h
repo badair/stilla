@@ -16,50 +16,47 @@ struct lazy_filter_iterator
 	using expr_type = functor;
 	using this_type = lazy_filter_iterator<arg_itr, functor>;
 
-	arg_itr arg;
+	arg_itr current;
 	arg_itr end;
 	functor expr;
 
 	using value_type = typename std::remove_pointer<arg_itr>::type;
 
-	lazy_filter_iterator(arg_itr arg_, arg_itr end_, functor expr_) : arg(arg_), end(end_), expr(expr_)
+	lazy_filter_iterator(arg_itr arg_, arg_itr end_, functor expr_) : current(arg_), end(end_), expr(expr_)
 	{
 	}
 
-	lazy_filter_iterator(const this_type& other) : arg(other.arg), end(other.end), expr(other.expr)
+	lazy_filter_iterator(const this_type& other) : current(other.current), end(other.end), expr(other.expr)
 	{
 	}
 
-	void increment_to_next_match()
+	auto operator*() const
 	{
-		while (arg != end && !expr(*arg))
+		auto temp = current;
+
+		while (temp != end && !expr(*temp))
 		{
-			++arg;
+			++temp;
 		}
-	}
 
-	auto operator*()
-	{
-		increment_to_next_match();
-		return *arg;
+		return *temp;
 	}
 
 	inline this_type& operator++()
 	{
-		++arg;
-		return *this;
-	}
+		++current;
 
-	inline this_type operator++(int)
-	{
-		auto result = this_type(arg, expr);
-		++arg;
-		return result;
+		while (current != end && !expr(*current))
+		{
+			++current;
+		}
+
+		return *this;
 	}
 
 	inline bool operator!=(const this_type& other) const
 	{
-		return arg != other.arg;
+		return current != other.current;
 	}
 };
 
